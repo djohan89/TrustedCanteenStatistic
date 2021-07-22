@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Convert Excel into Json</title>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
+
+    <!-- ===== Bootstrap 4 ===== -->
+    <link rel="stylesheet" 
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+        crossorigin="anonymous"></script>
+</head>
+
+
+
+<body>
+    <input type="file" id="fileUpload" accept=".xls,.xlsx" 
+        class="form-control" style="width: 20%;" /><br />
+    <button type="button" id="uploadExcel">Convert</button><br />
+    <!-- <pre id="jsonData"></pre> -->
+    <textarea id="jsonData" rows="10" cols="100"></textarea>
+
+    <div id="content">
+        
+    </div>
+</body>
+
+
+
+<script>
+    var selectedFile;
+    document
+        .getElementById("fileUpload")
+        .addEventListener("change", function(event) {
+            selectedFile = event.target.files[0];
+        });
+    document
+        .getElementById("uploadExcel")
+        .addEventListener("click", function() {
+            if (selectedFile) {
+                console.log("hiii");
+                var fileReader = new FileReader();
+                fileReader.onload = function(event) {
+                    var data = event.target.result;
+
+                    var workbook = XLSX.read(data, {
+                        type: "binary"
+                    });
+                    workbook.SheetNames.forEach(sheet => {
+                        let rowObject = XLSX.utils.sheet_to_row_object_array(
+                            workbook.Sheets[sheet]
+                        );
+                        let jsonObject = JSON.stringify(rowObject);
+                        document.getElementById("jsonData").innerHTML = jsonObject;
+                        
+                        // console đoạn json dưới dạng string
+                        console.log(jsonObject);
+
+                        // console đoạn json dưới dạng đối tượng
+                        console.log(rowObject);
+
+                        /*view_json_1(rowObject);*/
+                        view_json_2(rowObject);
+                    });
+                };
+                fileReader.readAsBinaryString(selectedFile);
+            }
+        });
+
+    /*function view_json_1(rowObject) {
+        var abc = document.getElementById("content");
+        var count = 0;
+        var insert_html = '';
+
+        for (i = 0; i < rowObject.length; i++) {
+            if (typeof(rowObject[i]["Name"]) != "undefined") {
+                count++;
+            }
+        }
+        console.log(count);
+    }*/
+
+    function view_json_2(rowObject) {
+        var abc = document.getElementById("content");
+        var insert_html = '';
+        var button_id = 1;
+
+        var groupBy = function(xs, key) {
+            return xs.reduce(function(rv, x) {
+                (rv[x[key]] = rv[x[key]] || []).push(x);
+                return rv;
+            }, {});
+        };
+        var groubedByTeam = groupBy(rowObject, 'Company');
+
+        console.log("Phân chia theo mục Company:");
+        console.log("");
+        console.log(groubedByTeam);
+        console.log(typeof(groubedByTeam));
+
+        // Vòng lặp đọc mảng json khi có key
+        for(var k in groubedByTeam) {
+            insert_html +=  '<div id="' + button_id + '">' + 
+                                '<button>' + k + ' ' + groubedByTeam[k].length + '</button>' +
+                            '</div>';
+            console.log(k, groubedByTeam[k].length);
+
+            button_id++;
+        }
+        abc.innerHTML = insert_html;
+        
+    }
+</script>
+</html>

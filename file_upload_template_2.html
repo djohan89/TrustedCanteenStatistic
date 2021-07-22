@@ -1,0 +1,91 @@
+<link rel="stylesheet" type="text/css" 
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" 
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<script type="text/javascript" 
+    src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" 
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<!-- ===== Datatable ===== -->
+<script type="text/javascript" 
+    src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" 
+    href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
+<!-- ===== Thư viện XLSX ===== -->
+<script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
+
+
+
+<meta charset="utf-8">
+<div class="container center" style="width: 100%; background-color: white;">
+    <div class="row">
+        <div class="col-md-6" style="background-color: #1E2832; height: 100%; padding-top: 10%;">
+            <!-- Phần tiêu đề -->
+            <h1 class="white">File Upload</h1>
+
+            <!-- Phần nội dung upload file -->
+            <form name="upload" method="post" action="#" enctype="multipart/form-data" 
+                accept-charset="utf-8">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 center">
+                        <div class="btn-container">
+                            <!--the three icons: default, ok file (img), error file (not an img)-->
+                            <h1 class="imgupload"><i class="fa fa-file-image-o"></i></h1>
+                            <h1 class="imgupload ok"><i class="fa fa-check"></i></h1>
+                            <h1 class="imgupload stop"><i class="fa fa-times"></i></h1>
+                            <!--this field changes dinamically displaying the filename we are trying to upload-->
+                            <p id="namefile">File chấp nhận! (xls,xlsx)</p>
+                            <!--our custom btn which which stays under the actual one-->
+                            <button type="button" id="btnup" class="btn btn-primary btn-lg">
+                                Chọn file của bạn!</button>
+                            <!--this is the actual file input, is set with opacity=0 beacause we wanna see our custom one-->
+                            <input type="file" value="" name="fileup" id="fileup" style="width: 30%;">
+                        </div>
+                    </div>
+                </div>
+                <!--additional fields-->
+                <div class="row">     
+                    <div class="col-md-12">
+                        <!--the defauld disabled btn and the actual one shown only if the three fields are valid-->
+                        <input type="submit" value="Submit!" class="btn btn-primary" id="submitbtn">
+                        <button type="button" class="btn btn-default" disabled="disabled" id="fakebtn">
+                            Xuất dữ liệu! <i class="fa fa-minus-circle"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <!-- Phần tiêu đề -->
+            <h1><b>DỮ LIỆU ĐẦU RA</b></h1><hr>
+
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Họ và tên</th>
+                        <th>Công ty</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <th>Họ và tên</th>
+                        <th>Công ty</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<script type="text/javascript" src="js/main.js"></script>
