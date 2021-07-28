@@ -79,22 +79,15 @@
 
             <table id="datatable_employee" class="display" style="width:100%">
                 <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
+                    <tr style="background-color: lightgrey;">
+                        <th></th>
                         <th>Company</th>
-                        <!-- <th>Transaction</th> -->
-                        <th>Quantity</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
                 <tfoot>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
+                    <tr style="background-color: lightgrey;">
+                        <th></th>
                         <th>Company</th>
-                        <!-- <th>Transaction</th> -->
-                        <th>Quantity</th>
                     </tr>
                 </tfoot>
             </table>
@@ -106,17 +99,21 @@
 
 <link rel="stylesheet" type="text/css" href="css/main.css">
 
-<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/main_test.js"></script>
 
 
 
 <style type="text/css">
-    /* ===== Datatable ===== */
-    tr.group,
-    tr.group:hover {
-        background-color: black !important;
-        color: white;
+    td.details-control {
+        background: url('img/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('img/details_close.png') no-repeat center center;
+    }
+
+    .highlight {
+        color: blue;
         font-weight: bold;
-        font-size: 20px;
     }
 </style>

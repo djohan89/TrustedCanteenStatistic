@@ -46,11 +46,11 @@
         .getElementById("submitbtn")
         .addEventListener("click", function() {
             if (selectedFile) {
-                console.log("hiii");
+                console.log("Hello Hi Bông Dua Canh thiu không ai múc!!!");
                 var fileReader = new FileReader();
                 fileReader.onload = function(event) {
                     var data = event.target.result;
-                    
+
                     var workbook = XLSX.read(data, {
                         type: "binary"
                     });
@@ -62,33 +62,18 @@
                         // document.getElementById("jsonData").innerHTML = jsonObject;
                         
                         // console đoạn json dưới dạng string
-                        console.log(jsonObject);
+                        // console.log(jsonObject);
 
                         // console đoạn json dưới dạng đối tượng
-                        console.log(rowObject, typeof(rowObject), rowObject.Name);
+                        // console.log(rowObject, typeof(rowObject), rowObject.Name);
 
                         /*view_json_1(rowObject);*/
-                        view_json_employee(rowObject);
-
-                        
+                        view_json_employee(rowObject); // Gọi và đẩy dữ liệu đến function view_json_employee
                     });
                 };
                 fileReader.readAsBinaryString(selectedFile);
             }
         });
-
-    /*function view_json_1(rowObject) {
-        var abc = document.getElementById("content");
-        var count = 0;
-        var insert_html = '';
-
-        for (i = 0; i < rowObject.length; i++) {
-            if (typeof(rowObject[i]["Name"]) != "undefined") {
-                count++;
-            }
-        }
-        console.log(count);
-    }*/
 
     function view_json_employee(rowObject) {
 
@@ -97,23 +82,31 @@
         var dem = 0;
 
         for(var x in rowObject) {
+
+            var str = rowObject[x]['Date & Time'];
+            var sub_str = str.substring(11, 13); // 
+            var check_date = parseInt(sub_str);
+
+            // Chỉ lấy những bản ghi có các trường không bỏ trống
             if (rowObject[x]['Name'] && rowObject[x]['Company'] && rowObject[x]['Card No']) {
-                console.log(rowObject[x], "hello xxx");
-                obj_check_null.push(rowObject[x]);
-                dem++;
+                // Chỉ lấy những bản ghi trong khoảng từ 11h đến 15h
+                if (check_date >= 11 && check_date <= 15) {
+                    // console.log(rowObject[x], "hello xxx");
+                    obj_check_null.push(rowObject[x]);
+                    dem++;
+                }
             }
         }
         console.log(dem, obj_check_null);
 
-        datatable.rows.add(obj_check_null); // Add new data
-        datatable.columns.adjust().draw(); // Redraw the DataTable
 
-        /*const arrayUniqueByKey = [...new Map(rowObject.map(item =>
-          [item[key], item])).values()];*/
 
-        /*console.log("key nè: ", arrayUniqueByKey);*/
+        // Thêm dữ liệu vào datatable
+        // table.rows.add(obj_check_null); // Add new data
+        // table.columns.adjust().draw(); // Redraw the DataTable
 
-        // var abc = document.getElementById("content"); //Lấy ra id phần hiện thông tin (test)
+
+
         var insert_html = '';
         var button_id = 1;
 
@@ -132,8 +125,8 @@
 
         // Vòng lặp đọc mảng json khi có key
         for(var k in groubedByTeam) {
-            console.log(k, groubedByTeam[k].length);
-            console.log(groubedByTeam[k], "hello");
+            // console.log(k, groubedByTeam[k].length);
+            // console.log(groubedByTeam[k], "hello");
 
             const key = 'Name';
             var arrayUniqueByKey = [...new Map(groubedByTeam[k].map(item =>
@@ -142,11 +135,9 @@
             console.log("key nè: "+k, arrayUniqueByKey);
             obj_group.push(arrayUniqueByKey);
 
-            
-
             button_id++;
         }
-        console.log("Dữ liệu chính:", obj_group);
+        // console.log("Dữ liệu chính:", obj_group);
 
         // Thay thế dữ liệu mới lấy được (XL_row_object) truyền vào datatable (báo cáo 1)
         /*datatable.clear().draw();
@@ -155,75 +146,3 @@
         
     }
 /* ===== Cuối: Phần chức năng đọc file excel ===== */
-
-
-
-/* ===== Đầu: Datatable - Bảng danh sách nhân viên quẹt thẻ =====*/
-    var data_json = ''; // Biến chứa dữ liệu rỗng trước khi upload file
-    var groupColumn = 2; // Cột thực hiện nhóm dữ liệu (1 -> cột số 2)
-    var datatable = $('#datatable_employee').DataTable({
-        data: data_json,
-        columns: [
-            { 
-                data: "Date & Time",
-                render: function(data, type, row) {
-                    var html =  data.substring(0, 11);
-                    return html;
-                }
-            },
-            { data: "Name" },
-            { data: "Company" },
-            // { data: "Transaction" },
-            {
-                data: 'Name',
-                render: function(data, type, row) {
-                    var html =  'Đã ăn một suất';
-                    return html;
-                }
-            }
-        ],
-
-        // Thiết lập hiệu ứng cuộn
-        "scrollY":        "480px",
-        "scrollCollapse": true,
-        "paging":         false,
-
-        // Thiết lập nhóm bản ghi
-        "columnDefs": [
-            { "visible": false, "targets": groupColumn }
-        ],
-        "order": [[ groupColumn, 'asc' ]],
-        "drawCallback": function ( settings ) {
-            var api = this.api();
-            var rows = api.rows( {page:'current'} ).nodes();
-            var last=null;
- 
-            api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
-                if ( last !== group ) {
-                    $(rows).eq( i ).before(
-                        '<tr class="group"><td colspan="4">'+group+'</td></tr>'
-                    );
- 
-                    last = group;
-                }
-            } );
-        }
-    } );
- 
-    // Order by the grouping
-    $('#datatable_employee tbody').on( 'click', 'tr.group', function () {
-        var currentOrder = datatable.order()[0];
-        if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
-            datatable.order( [ groupColumn, 'desc' ] ).draw();
-        }
-        else {
-            datatable.order( [ groupColumn, 'asc' ] ).draw();
-        }
-    } );
-/* ===== Cuối: Datatable - Bảng danh sách nhân viên quẹt thẻ =====*/
-
-
-
-/* ===== Đầu: Datatable - Bảng danh sách phòng ban có trong file upload =====*/
-
-/* ===== Cuối: Datatable - Bảng danh sách phòng ban có trong file upload =====*/

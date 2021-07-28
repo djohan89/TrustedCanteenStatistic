@@ -8,12 +8,6 @@
 <script type="text/javascript" 
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<!-- ===== Datatable ===== -->
-<script type="text/javascript" 
-    src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" 
-    href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-
 <!-- ===== Thư viện XLSX ===== -->
 <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
@@ -64,12 +58,6 @@
                         <!-- <div id="content"></div> -->
                     </div>
                 </div>
-                <hr style="margin-bottom: -10px;">
-                <div class="row">     
-                    <div class="col-md-12">
-                        <h2 class="white"><b>DANH SÁCH PHÒNG BAN</b></h2><hr style="margin-top: -5px;">
-                    </div>
-                </div>
             </form>
         </div>
 
@@ -77,27 +65,9 @@
             <!-- Phần tiêu đề -->
             <h1><b>DỮ LIỆU ĐẦU RA</b></h1><hr>
 
-            <table id="datatable_employee" class="display" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <!-- <th>Transaction</th> -->
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <!-- <th>Transaction</th> -->
-                        <th>Quantity</th>
-                    </tr>
-                </tfoot>
-            </table>
+            <div id="data_btn">
+                <button class="btn">ANSV Giám Đốc</button>
+            </div>
         </div>
     </div>
 </div>
@@ -106,17 +76,4 @@
 
 <link rel="stylesheet" type="text/css" href="css/main.css">
 
-<script type="text/javascript" src="js/main.js"></script>
-
-
-
-<style type="text/css">
-    /* ===== Datatable ===== */
-    tr.group,
-    tr.group:hover {
-        background-color: black !important;
-        color: white;
-        font-weight: bold;
-        font-size: 20px;
-    }
-</style>
+<script type="text/javascript" src="js/main_new.js"></script>
