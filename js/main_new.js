@@ -78,9 +78,10 @@
     function view_json_employee(rowObject) {
 
         var obj_check_null = [];
-        var obj_group = [];
+        var obj_group = []; // Mảng rỗng để đẩy dữ liệu vào
         var dem = 0;
 
+        /* Lọc dữ liệu để đưa vào mảng json xử lý */
         for(var x in rowObject) {
 
             var str = rowObject[x]['Date & Time'];
@@ -97,7 +98,7 @@
                 }
             }
         }
-        console.log(dem, obj_check_null);
+        console.log(dem, obj_check_null); // Mảng json lấy được
 
 
 
@@ -106,10 +107,7 @@
         // table.columns.adjust().draw(); // Redraw the DataTable
 
 
-
-        var insert_html = '';
-        var button_id = 1;
-
+        // Nhóm dữ liệu của mảng json theo trường "Company"
         var groupBy = function(xs, key) {
             return xs.reduce(function(rv, x) {
                 (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -123,26 +121,106 @@
         console.log(groubedByTeam);
         console.log(typeof(groubedByTeam));
 
+
+    /*Sau khi lấy được mảng json đã gộp dữ liệu theo nhóm (Company). 
+        Đến chức năng sắp xếp mảng json đó (trường hợp có keys) theo trường "Company" 
+        theo bảng chữ cái*/
+        const ordered = Object.keys(groubedByTeam).sort().reduce(
+            (obj, key) => { 
+                obj[key] = groubedByTeam[key]; 
+                return obj;
+            }, 
+            {}
+        );
+        console.log("ordered", JSON.stringify(ordered));
+
+
+
         // Vòng lặp đọc mảng json khi có key
-        for(var k in groubedByTeam) {
-            // console.log(k, groubedByTeam[k].length);
-            // console.log(groubedByTeam[k], "hello");
+        var data_detail_staff = "";
+        var data_show = "";
+        var data_show_child =   '<li>' +
+                                    '<table class="table">';
+        var group_name = "";
+
+        // for(var k in groubedByTeam) {
+        for(var k in ordered) {
+
+            // Nhóm dữ liệu của từng mảng theo trường "Name"
+            group_name = ordered[k];
+            var groupByName = function(xs, key) {
+                return xs.reduce(function(rv, x) {
+                    (rv[x[key]] = rv[x[key]] || []).push(x);
+                    return rv;
+                }, {});
+            };
+            var result_group_name = groupByName(group_name, 'Name');
+            console.log("");
+            console.log("Nhóm theo tên:");
+            console.log(group_name, result_group_name);
+
+            // Phần hiển thị thông tin chi tiết về danh sách nhân viên quẹt thẻ của mỗi phòng/ban
+            // for(var x in ordered[k]) {
+            for(var x in result_group_name) {
+                // console.log("---"+x, ordered[k][x]);
+
+                for(var n in result_group_name[x]) {
+                    data_detail_staff = result_group_name[x][n]["Card No"];
+                }
+
+                data_show_child +=  '<tr>' +
+                                        '<td>' +
+                                            + data_detail_staff +
+                                        '</td>' +
+                                        '<td>' +
+                                            x +
+                                        '</td>' +
+                                        '<td>' +
+                                            '(' + result_group_name[x].length + ')' +
+                                        '</td>' +
+                                    '</tr>';
+
+            }
+            data_show_child +=      '</table>' +
+                                '</li>';
+
+            /* Phần hiển thị danh sách phòng/ban có kèm chi tiết lấy từ vòng lặp trên */
+            data_show += '<li>' +
+                            '<a href="javascript:void(0)" class="drop_active">' +
+                                k +
+                                '<i class="icon-menu fas fa-chevron-down"></i> ' + 
+                                '(' + ordered[k].length + ')' +
+                            '</a>' +
+                            '<ul class="sub-menu">' +
+                                data_show_child +
+                            '</ul>' +
+                        '</li>';
+
 
             const key = 'Name';
-            var arrayUniqueByKey = [...new Map(groubedByTeam[k].map(item =>
+            var arrayUniqueByKey = [...new Map(ordered[k].map(item =>
                 [item[key], item])).values()];
 
             console.log("key nè: "+k, arrayUniqueByKey);
             obj_group.push(arrayUniqueByKey);
 
-            button_id++;
+            data_show_child =   '<li>' +
+                                    '<table class="table">';
         }
+        document.getElementById("div_data_show").innerHTML = data_show;
+        console.log("Đã chèn thành công!!!");
         // console.log("Dữ liệu chính:", obj_group);
 
         // Thay thế dữ liệu mới lấy được (XL_row_object) truyền vào datatable (báo cáo 1)
         /*datatable.clear().draw();
         datatable.rows.add(obj); // Add new data
         datatable.columns.adjust().draw(); // Redraw the DataTable*/
+
+        $('.dropdown-menu-1 .drop_active').click(function () {
+            // console.log("ABC");
+            $(this).parent('li').children('.sub-menu').slideToggle();
+            $(this).find("i").toggleClass('fa-chevron-down fa-chevron-right');
+        });
         
     }
 /* ===== Cuối: Phần chức năng đọc file excel ===== */

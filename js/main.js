@@ -50,7 +50,7 @@
                 var fileReader = new FileReader();
                 fileReader.onload = function(event) {
                     var data = event.target.result;
-                    
+
                     var workbook = XLSX.read(data, {
                         type: "binary"
                     });
@@ -175,7 +175,7 @@
             { data: "Company" },
             // { data: "Transaction" },
             {
-                data: 'Name',
+                data: null,
                 render: function(data, type, row) {
                     var html =  'Đã ăn một suất';
                     return html;
