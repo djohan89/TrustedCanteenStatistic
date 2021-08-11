@@ -90,8 +90,8 @@
 
             // Chỉ lấy những bản ghi có các trường không bỏ trống
             if (rowObject[x]['Name'] && rowObject[x]['Company'] && rowObject[x]['Card No']) {
-                // Chỉ lấy những bản ghi trong khoảng từ 11h đến 15h
-                if (check_date >= 11 && check_date <= 15) {
+                // Chỉ lấy những bản ghi trong khoảng từ 10h sáng đến 3h chiều (15h)
+                if (check_date >= 10 && check_date <= 15) {
                     // console.log(rowObject[x], "hello xxx");
                     obj_check_null.push(rowObject[x]);
                     dem++;
